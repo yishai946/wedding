@@ -30,9 +30,11 @@ const GuestForm = () => {
       }
 
       const timestamp = new Date().getTime().toString();
+      const attending = isAttending === "yes";
+
       await setDoc(doc(db, "guests", timestamp), {
         name,
-        isAttending,
+        isAttending: attending,
         guests: isAttending === "yes" ? parseInt(guests) : 0,
         phone,
       });
@@ -152,6 +154,7 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f6d8d2",
+    padding: "10px",
   },
   background: {
     position: "absolute",
@@ -164,8 +167,9 @@ const styles = {
     opacity: 0.9,
   },
   content: {
-    maxWidth: "600px",
-    padding: "30px",
+    width: "100%",
+    maxWidth: "500px",
+    padding: "20px",
     borderRadius: "20px",
     boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)",
     backgroundColor: "#fffafc",
@@ -173,14 +177,14 @@ const styles = {
     fontFamily: "'Amatic SC', cursive",
   },
   title: {
-    fontSize: "36px",
+    fontSize: "28px",
     color: "#c70039",
-    margin: "0",
+    margin: "0 0 10px",
   },
   description: {
-    fontSize: "18px",
+    fontSize: "16px",
     color: "#444",
-    marginBottom: "20px",
+    marginBottom: "15px",
     lineHeight: "1.5",
   },
   form: {
@@ -189,44 +193,65 @@ const styles = {
     alignItems: "center",
   },
   label: {
+    width: "100%",
     marginBottom: "10px",
-    fontSize: "20px",
+    fontSize: "18px",
     color: "#333",
+    textAlign: "left",
   },
   input: {
-    width: "90%",
+    width: "100%",
     padding: "10px",
-    fontSize: "18px",
+    fontSize: "16px",
     marginTop: "5px",
     marginBottom: "10px",
     borderRadius: "10px",
     border: "1px solid #ddd",
+    boxSizing: "border-box",
   },
   select: {
-    width: "90%",
+    width: "100%",
     padding: "10px",
-    fontSize: "18px",
+    fontSize: "16px",
     marginTop: "5px",
     marginBottom: "10px",
     borderRadius: "10px",
     border: "1px solid #ddd",
     backgroundColor: "#f3f3f3",
+    boxSizing: "border-box",
   },
   button: {
     padding: "10px 20px",
-    fontSize: "18px",
+    fontSize: "16px",
     backgroundColor: "#c70039",
     color: "#fff",
     border: "none",
     borderRadius: "20px",
     cursor: "pointer",
     transition: "background-color 0.3s",
+    width: "100%",
+    maxWidth: "200px",
   },
   successMessage: {
     textAlign: "center",
     color: "#333",
-    fontSize: "20px",
+    fontSize: "18px",
+  },
+
+  // Media query for smaller devices
+  "@media (max-width: 768px)": {
+    title: {
+      fontSize: "24px",
+    },
+    description: {
+      fontSize: "14px",
+    },
+    button: {
+      padding: "8px 15px",
+      fontSize: "14px",
+    },
   },
 };
+
 
 export default GuestForm;
