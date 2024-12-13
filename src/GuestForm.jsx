@@ -53,7 +53,7 @@ const GuestForm = () => {
     const querySnapshot = await getDocs(q);
 
     return querySnapshot.docs.map((doc) => doc.data());
-  };
+  }
 
   const resetForm = () => {
     setName("");
