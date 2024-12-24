@@ -7,6 +7,7 @@
   align-items: center;
   background-color: #f6d8d2;
   font-family: 'Amatic SC';
+  padding: 10px; /* Add padding for mobile view */
 }
 
 .background-overlay {
@@ -26,6 +27,8 @@
   background: #fff;
   border-radius: 15px;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for better visibility */
+  overflow: hidden; /* Prevent overflowing content */
 }
 
 /* Header styles */
@@ -101,4 +104,22 @@ form select {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+/* Responsive Design for Mobile */
+@media screen and (max-width: 768px) {
+  .content-wrapper {
+    max-width: 100%; /* Use full width */
+    padding: 15px; /* Add padding */
+    border-radius: 10px; /* Reduce border radius */
+  }
+
+  form label {
+    font-size: 16px; /* Adjust font size */
+  }
+
+  .button,
+  .waze-button {
+    font-size: 16px; /* Adjust button size */
+  }
 }

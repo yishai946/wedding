@@ -64,7 +64,8 @@ const Form = () => {
   };
 
   const handleWazeNavigation = () => {
-    const url = "https://ul.waze.com/ul?preview_venue_id=23265605.232656051.26996&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location"
+    const url =
+      "https://ul.waze.com/ul?preview_venue_id=23265605.232656051.26996&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location";
     window.open(url);
   };
 
