@@ -80,8 +80,27 @@ const GuestForm = () => {
           <>
             <h1 style={styles.title}>אליה & הללי</h1>
             <p style={styles.description}>
-              אנו נרגשים להזמינך להצטרף לחגוג את אהבתנו ביום המיוחד שלנו. אנא
-              מלא/י את הפרטים כדי שנדע אם נזכה לראותך!
+              בס"ד
+              <br />
+              הנכם מוזמנים לחתונה של אליה & הללי
+              <br />
+              שתתקיים אי"ה ביום שלישי ד' באדר
+              <br />
+              (04/03/2025)
+              <br />
+              בשעה 18:45
+              <br />
+              באולם החתונות "הסיינדה"
+              <br />
+              (אזור התעשייה הצפונית, העמל בית שאן)
+              <br />
+              <br />
+              לנוחיותכם ניווט מהיר לאירוע עם ווייז*
+              <br />
+              <br />
+              נשמח לראותכם בין אורחינו
+              <br />
+              אליה & הללי
             </p>
             <form onSubmit={handleSubmit} style={styles.form}>
               <label style={styles.label}>
@@ -177,12 +196,12 @@ const styles = {
     fontFamily: "'Amatic SC', cursive",
   },
   title: {
-    fontSize: "28px",
+    fontSize: "38px",
     color: "#c70039",
     margin: "0 0 10px",
   },
   description: {
-    fontSize: "16px",
+    fontSize: "22px",
     color: "#444",
     marginBottom: "15px",
     lineHeight: "1.5",
