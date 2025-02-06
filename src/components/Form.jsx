@@ -23,11 +23,19 @@ const Form = () => {
     try {
       setLoading(true);
 
-      const existingGuest = await getGuestByPhone(phone);
-      if (existingGuest.length > 0) {
-        alert("מספר הטלפון קיים כבר, נסה שוב");
-        return;
-      }
+      if (phone.length > 0) {
+        // regex check that it is valid phone number: 05X-XXX-XXXX
+        const phoneRegex = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
+        if (!phoneRegex.test(phone)) {
+          alert("מספר הטלפון אינו תקין, נסה שוב");
+          return;
+        }
+
+        if (await getGuestByPhone(phone) > 0) {
+          alert("מספר הטלפון קיים כבר, נסה שוב");
+          return;
+        }
+      }      
 
       const timestamp = new Date().getTime().toString();
       const attending = isAttending === "yes";
@@ -97,8 +105,7 @@ const Form = () => {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="הקלד/י את מספר הטלפון שלך"
-                required
+                placeholder="הקלד/י את מספר הטלפון שלך (לא חובה)"
               />
             </label>
             <label>
