@@ -8,6 +8,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import SuccessMessage from "./SuccessMessage";
 
 const Form = () => {
   const [name, setName] = useState("");
@@ -31,11 +32,11 @@ const Form = () => {
           return;
         }
 
-        if (await getGuestByPhone(phone) > 0) {
+        if ((await getGuestByPhone(phone)) > 0) {
           alert("מספר הטלפון קיים כבר, נסה שוב");
           return;
         }
-      }      
+      }
 
       const timestamp = new Date().getTime().toString();
       const attending = isAttending === "yes";
@@ -82,10 +83,7 @@ const Form = () => {
       {loading ? (
         <div>Loading...</div>
       ) : formSubmitted ? (
-        <div className="success-message">
-          <h2>תודה רבה! פרטיך נשלחו בהצלחה.</h2>
-          <button onClick={resetForm}>שלח/י טופס נוסף</button>
-        </div>
+        <SuccessMessage resetForm={resetForm} />
       ) : (
         <>
           <form onSubmit={handleSubmit}>
