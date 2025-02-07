@@ -18,22 +18,31 @@ const Form = () => {
   const [loading, setLoading] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  // Function to check if a phone number already exists in Firestore
+  const getGuestByPhone = async (phone) => {
+    const guestsRef = collection(db, "guests");
+    const q = query(guestsRef, where("phone", "==", phone));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty; // Returns true if the phone exists
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      setLoading(true);
-
-      if (phone.length > 0) {
-        // regex check that it is valid phone number: 05X-XXX-XXXX
+      if (phone.trim().length > 0) {
+        // Validate phone number format: 05X-XXX-XXXX
         const phoneRegex = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
         if (!phoneRegex.test(phone)) {
           alert("מספר הטלפון אינו תקין, נסה שוב");
+          setLoading(false);
           return;
         }
 
-        if ((await getGuestByPhone(phone)) > 0) {
+        if (await getGuestByPhone(phone)) {
           alert("מספר הטלפון קיים כבר, נסה שוב");
+          setLoading(false);
           return;
         }
       }
@@ -44,7 +53,7 @@ const Form = () => {
       await setDoc(doc(db, "guests", timestamp), {
         name,
         isAttending: attending,
-        guests: isAttending === "yes" ? parseInt(guests) : 0,
+        guests: attending ? +guests : 0, // Convert guests to number only if attending
         phone,
       });
 
@@ -56,14 +65,6 @@ const Form = () => {
     }
   };
 
-  const getGuestByPhone = async (phone) => {
-    const guestsRef = collection(db, "guests");
-    const q = query(guestsRef, where("phone", "==", phone));
-    const querySnapshot = await getDocs(q);
-
-    return querySnapshot.docs.map((doc) => doc.data());
-  };
-
   const resetForm = () => {
     setName("");
     setIsAttending("");
@@ -72,10 +73,30 @@ const Form = () => {
     setFormSubmitted(false);
   };
 
+  // Function to handle Waze navigation, prioritizing app usage
   const handleWazeNavigation = () => {
-    const url =
-      "https://ul.waze.com/ul?preview_venue_id=23265605.232656051.26996&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location";
-    window.open(url);
+    const wazeAppUrl = "waze://?ll=32.51027371,35.49961797&navigate=yes";
+    const wazeWebUrl =
+      "https://waze.com/ul?ll=32.51027371,35.49961797&navigate=yes";
+
+    let opened = false;
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        opened = true;
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    window.location.href = wazeAppUrl;
+
+    setTimeout(() => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      if (!opened) {
+        window.location.href = wazeWebUrl;
+      }
+    }, 2000);
   };
 
   return (
@@ -103,7 +124,7 @@ const Form = () => {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="הקלד/י את מספר הטלפון שלך (לא חובה)"
+                placeholder="טלפון (לא חובה)"
               />
             </label>
             <label>
@@ -135,7 +156,11 @@ const Form = () => {
             <button className="button" type="submit">
               שלח/י
             </button>
-            <button className="waze-button" onClick={handleWazeNavigation}>
+            <button
+              className="waze-button"
+              onClick={handleWazeNavigation}
+              type="button"
+            >
               ניווט לאירוע
             </button>
           </form>
