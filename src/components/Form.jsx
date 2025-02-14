@@ -31,29 +31,26 @@ const Form = () => {
     setLoading(true);
 
     try {
-      if (phone.trim().length > 0) {
-        // Validate phone number format: 05X-XXX-XXXX
-        const phoneRegex = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
-        if (!phoneRegex.test(phone)) {
-          alert("מספר הטלפון אינו תקין, נסה שוב");
-          setLoading(false);
-          return;
-        }
+      // Validate phone number format: 05X-XXX-XXXX
+      const phoneRegex = /^05\d([-]{0,1})\d{3}([-]{0,1})\d{4}$/;
+      if (!phoneRegex.test(phone)) {
+        alert("מספר הטלפון אינו תקין, נסה שוב");
+        setLoading(false);
+        return;
+      }
 
-        if (await getGuestByPhone(phone)) {
-          alert("מספר הטלפון קיים כבר, נסה שוב");
-          setLoading(false);
-          return;
-        }
+      if (await getGuestByPhone(phone)) {
+        alert("מספר הטלפון קיים כבר, נסה שוב");
+        setLoading(false);
+        return;
       }
 
       const timestamp = new Date().getTime().toString();
-      const attending = isAttending === "yes";
 
       await setDoc(doc(db, "guests", timestamp), {
         name,
-        isAttending: attending,
-        guests: attending ? +guests : 0, // Convert guests to number only if attending
+        isAttending,
+        guests: isAttending == "yes" ? +guests : 0, 
         phone,
       });
 
@@ -124,7 +121,7 @@ const Form = () => {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="טלפון (לא חובה)"
+                placeholder="טלפון"
               />
             </label>
             <label>
@@ -139,6 +136,7 @@ const Form = () => {
                 </option>
                 <option value="yes">כן</option>
                 <option value="no">לא</option>
+                <option value="maybe">אולי</option>
               </select>
             </label>
             {isAttending === "yes" && (
